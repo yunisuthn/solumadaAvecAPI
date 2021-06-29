@@ -6,6 +6,11 @@ const fs = require('fs');
 const path = require('path');
 const extra_fs = require('fs-extra');
 const os = require('os')
+const cors = require('cors')
+
+const app = express()
+
+app.use(cors())
 var contentDisposition = require('content-disposition')
 
 //Declaration des variables globales
@@ -20,7 +25,6 @@ var numBtn = 1; //Variable numbtn a utiliser pour le numero de button (a voir da
 var dir_home = os.homedir()
 var dir_desktop = path.join(dir_home, "Desktop", "Download");
 
-const app = express()
 
 var redacted_files_directory = "Downloads/Readact"; //variable pour le dossier a vider a chaque fois que le programme commence a traiter un dossier selectionné
 var zip_files_directory = "Downloads/zip"; //variable pour le dossier a vider a chaque fois que le programme commence a traiter un dossier selectionné
@@ -50,13 +54,15 @@ routeExp.route('/fileupload').post(function (req, res) {
     numBtn = 1;
     // Utilisation de module formidable pour prendre les fichier dans le dossier selectionnes
     let form = new formidable.IncomingForm();
+    console.log("file ***  file  " );
     form.on('file', function (field, file) {
-
+        console.log("file file");
         //Insertion des fichiers pdf dans l'array selected_files
         if (file.type === 'application/pdf')
             selected_files.push(file);
     });
     form.parse(req, async function (err, fields, files) {
+        console.log("parse");
         if (fields.btn1 == '') {
             //Demarrage du traitement
             extra_fs.emptyDirSync(redacted_files_directory); //Vidage du dossier redacted_files
