@@ -9,10 +9,10 @@ const mongoose = require("mongoose")
 const config = require('./BD.js')
 const bodyParser = require('body-parser');
 const route = require('./public/route.js')
-
+const PORT = process.env.PORT || 8082
 const methodOverride = require('method-override')
 mongoose.Promise = global.Promise
-mongoose.connect(config.DB, { userNewUrlParser: true }).then(
+mongoose.connect(config.DB,{useUnifiedTopology: true, useNewUrlParser: true }).then(
     () => { console.log("Database is connected") },
     err => { console.log('Can not connect to the database' + err) }
 )
@@ -29,13 +29,9 @@ app.use(express.static(__dirname + '/public'));
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-
+app.use('/', route)
 // extra_fs.emptyDirSync(redacted_files_directory); //Vidage du dossier redacted_files
 // extra_fs.emptyDirSync(clickable_files_directory); //Vidage du dossier clickables_files
-
-const PORT = process.env.PORT || 8081
-
-app.use('/', route)
 
 app.listen(PORT, function(){
     console.log("server running ", PORT);
