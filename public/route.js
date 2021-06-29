@@ -10,7 +10,7 @@ const cors = require('cors')
 
 const app = express()
 
-app.use(cors())
+
 var contentDisposition = require('content-disposition')
 
 //Declaration des variables globales
@@ -38,14 +38,154 @@ function progress(value) {
 }
 
 var donne = []
-
 routeExp.route('/parametre').post(function (req, res) {
     donne = req.body
 })
 
 var selected_files = [];
+
+const donneAPI = [
+    {
+        name: 'Email',
+        pattern: '[a-zA-Z0-9._%+-]+[a-zA-Z0-9._%+-]+@[A-z]+[a-zA-Z0-9._%+-]+[a-zA-Z]'
+    },
+    {
+        name: 'Numéro téléphone',
+        pattern: '[+]3{1}2{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{3}+[ ]{0,1}+[-]{0,1}+[.]{0,1}+\\d{2}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{2}+\\d{0,1}'
+    },
+    {
+        name: 'Numéro permis',
+        pattern: '/[1-9]{2}[ .]{0,1}(?:1[0-2]|0[0-9]{1})[ .]{0,1}[0-9]{2}[ .]{0,1}[0-9]{2}[ .]{0,1}[0-9]{4}/g'
+    },
+    {
+        name: 'Employeur identification',
+        pattern: '\\b(?:[1-9]{1}[0-9]{11})\\b'
+    },
+    {
+        name: 'Identification nationale',
+        pattern: '[0-9]{2}[.](?:1[0-2]|0[0-9]{1})[.](?:3[0-1]|0[1-9]{1}|2[0-9]{1})-[0-9]{3}[.][0-9]{2}'
+    },
+    {
+        name: 'Numéro bancaire',
+        pattern: '[A-Z]{2}[0-9]{2} ?\\d{4} ?\\d{4} ?\\d{4} ?(\\w{8})?'
+    },
+    {
+        name: 'Numéro TVA',
+        pattern: '[A-Z]{2}[ ]{0,1}[0-9]{4}[^A-Za-z0-9_]{0,1}[0-9]{3}[^A-Za-z0-9_]{0,1}[0-9]{3}'
+    },
+    // {
+    //     name: 'Swift / BIC',
+    //     pattern :''
+    // },
+    // {
+    //     name: 'Genre',
+    //     pattern :''
+    // },
+    // {
+    //     name: 'Ethinicité',
+    //     pattern :''
+    // },
+    // {
+    //     name: "Nom d'utilisateur",
+    //     pattern :''
+    // },
+    {
+        name: 'Numéro passport',
+        pattern: '\\b(?:[A-Z]{2}[0-9]{6})\\b'
+    },
+    // {
+    //     name: 'Situation familiale',
+    //     pattern :''
+    // },
+    // {
+    //     name: "Numéro d'allocation",
+    //     pattern :''
+    // },
+    {
+        name: 'Identification véhicule',
+        pattern: '\\b(?:[1-8]{1}[-][A-Y]{1}[A-Z]{2}[-][0-9]{3})\\b'
+    },
+    {
+        name: 'VIN',
+        pattern: '\\b(?:(?:[0-9]|[A-H]|[J-N]|[P]|[R-Z]){8}(?:[0-9]|[X]){1}(?:[1-9]|[A-H]|[J-N]|[P]|[R-T]|[V-Y]){1}(?:[0-9]|[A-H]|[J-N]|[P]|[R-Z]){1}[0-9]{6})\\b'
+    },
+    {
+        name: 'Nom',
+        pattern :''
+    },
+    {
+        name: 'Ville',
+        pattern :''
+    },
+    {
+        name: 'Adresse',
+        pattern :''
+    }
+    // {
+    //     name: 'Nom de dépendance',
+    //     pattern :''
+    // }
+]
+
+var getParams = []
+
 routeExp.route('/fileupload').post(function (req, res) {
     // variables à reinitialiser
+    if(req.query.email=='true'){
+        let obj = {
+            name: 'Email',
+            pattern: '[a-zA-Z0-9._%+-]+[a-zA-Z0-9._%+-]+@[A-z]+[a-zA-Z0-9._%+-]+[a-zA-Z]'
+        }
+        getParams.push(obj)
+    }
+    if (req.query.phone=='true') {
+        let obj = {
+            name: 'Numéro téléphone',
+            pattern: '[+]3{1}2{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{3}+[ ]{0,1}+[-]{0,1}+[.]{0,1}+\\d{2}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{2}+\\d{0,1}'
+        }
+        getParams.push(obj)
+    }
+    if (req.query.tva=='true') {
+        let obj = {
+            name: 'Numéro TVA',
+            pattern: '[A-Z]{2}[ ]{0,1}[0-9]{4}[^A-Za-z0-9_]{0,1}[0-9]{3}[^A-Za-z0-9_]{0,1}[0-9]{3}'
+        }
+        getParams.push(obj)
+    }
+    if (req.query.permis=='true') {
+        let obj ={
+            name: 'Numéro permis',
+            pattern: '/[1-9]{2}[ .]{0,1}(?:1[0-2]|0[0-9]{1})[ .]{0,1}[0-9]{2}[ .]{0,1}[0-9]{2}[ .]{0,1}[0-9]{4}/g'
+        }
+        getParams.push(obj)
+    }
+    if (req.query.passport=='true') {
+        let obj =  {
+            name: 'Numéro passport',
+            pattern: '\\b(?:[A-Z]{2}[0-9]{6})\\b'
+        }
+        getParams.push(obj)
+    }
+    if (req.query.idVehicule=='true') {
+        let obj = {
+            name: 'Identification véhicule',
+            pattern: '\\b(?:[1-8]{1}[-][A-Y]{1}[A-Z]{2}[-][0-9]{3})\\b'
+        }
+        getParams.push(obj)
+    }
+    if (req.query.vinVehicule=='true') {
+        let obj =  {
+            name: 'VIN',
+            pattern: '\\b(?:(?:[0-9]|[A-H]|[J-N]|[P]|[R-Z]){8}(?:[0-9]|[X]){1}(?:[1-9]|[A-H]|[J-N]|[P]|[R-T]|[V-Y]){1}(?:[0-9]|[A-H]|[J-N]|[P]|[R-Z]){1}[0-9]{6})\\b'
+        }
+        getParams.push(obj)
+    }
+
+    for (let index = 0; index < getParams.length; index++) {
+        const element = getParams[index];
+        console.log(element);
+    }
+    
     FILE_NAME = '';
     OUTPUT_FILE_NAME = '';
     OUTPUT_FILE_NAME_CLICK = '';
@@ -54,19 +194,14 @@ routeExp.route('/fileupload').post(function (req, res) {
     numBtn = 1;
     // Utilisation de module formidable pour prendre les fichier dans le dossier selectionnes
     let form = new formidable.IncomingForm();
-    console.log("file ***  file  " );
     form.on('file', function (field, file) {
-        console.log("file file");
         //Insertion des fichiers pdf dans l'array selected_files
         if (file.type === 'application/pdf')
             selected_files.push(file);
     });
     form.parse(req, async function (err, fields, files) {
-        console.log("parse");
         if (fields.btn1 == '') {
             //Demarrage du traitement
-            extra_fs.emptyDirSync(redacted_files_directory); //Vidage du dossier redacted_files
-            extra_fs.emptyDirSync(clickable_files_directory); //Vidage du dossier clickables_files
             extra_fs.emptyDirSync(redacted_files_directory); //Vidage du dossier redacted_files
             extra_fs.emptyDirSync(clickable_files_directory); //Vidage du dossier clickables_files
             
@@ -116,15 +251,52 @@ routeExp.route('/fileupload').post(function (req, res) {
                         current_nbr_file = files.length;
                         if (files.length >= selected_files.length) {
                             clearInterval(counter);
-                            var zipdir = require('zip-dir');
-                            zipdir('Downloads/Clickable', { saveTo: 'Downloads/zip/Clickable.zip' }, function (err, buffer) {
-                            });
-                            zipdir('Downloads/Readact', { saveTo: 'Downloads/zip/Readact.zip' }, function (err, buffer) {
-                            });
                             console.log('** Redaction terminée... **');
                         }
                     });
                 }, 1000);
+            }
+        }else{
+            extra_fs.emptyDirSync(redacted_files_directory); //Vidage du dossier redacted_files
+            extra_fs.emptyDirSync(clickable_files_directory); //Vidage du dossier clickables_files
+            
+            extra_fs.emptyDirSync(zip_files_directory)
+            if (selected_files.length === 0) {
+                console.log('Aucun fichier PDF...')
+            } else {
+                for (let file of selected_files) {
+                    if (file !== undefined) {
+                        setTimeout(async () => {
+                            let arr = file.name.split('/');
+                            FILE_NAME = arr[arr.length - 1];
+                            OUTPUT_FILE_NAME = FILE_NAME.split('.pdf')[0] + '_redacted.pdf';
+                            OUTPUT_FILE_NAME_CLICK = FILE_NAME.split('.pdf')[0] + '_clickable.pdf';
+                            pdfpath_redacted = path.join(redacted_files_directory, OUTPUT_FILE_NAME)
+                            pdfpath_clickable = path.join(clickable_files_directory, OUTPUT_FILE_NAME_CLICK);
+                            console.log('Ici traitement')
+                            await create_redaction(file.path, getParams); //une fonction pour traiter un fichier
+            
+                        }, Time); //Une fonction setTimeout de 10 seconde pour s'assurrer que le traitement du fichier soit bien fini (un fichier = 20 seconde)
+                        //NB: Sur cette fonction si un ou plusieurs fichiers presente des champs non traitéés, il faudra augmenter le time
+                        Time += 20000;
+                    }
+                }
+                let current_nbr_file = 0; //variable pour compter les fichiers deja traites
+                const counter = setInterval(() => {
+                    fs.readdir(redacted_files_directory, function (err, files) {
+                        if (files.length != current_nbr_file) {
+                            console.log(files.length + (!(files.length > 1) ? ' fichier traité' : ' fichiers traités'));
+                            progress(files.length); //Ecrire le nombre de fichier traités dans progress.txt
+                        }
+                        current_nbr_file = files.length;
+                        if (files.length >= selected_files.length){
+                            clearInterval(counter);
+                            console.log('** Redaction terminée... **');
+                            res.sendStatus(200)
+                        }
+                    });
+                }, 1000);
+                
             }
         }
     });
@@ -198,6 +370,16 @@ routeExp.route('/progress.txt').get(function (req, res) {
     });
 })
 
+routeExp.route('/api/option').get(function (req, res){
+    extra_fs.emptyDirSync(zip_files_directory)
+
+    var zipdir = require('zip-dir');
+    zipdir('Downloads/Clickable', { saveTo: 'Downloads/zip/Clickable.zip' }, function (err, buffer) {
+    });
+    zipdir('Downloads/Readact', { saveTo: 'Downloads/zip/Readact.zip' }, function (err, buffer) {
+    });
+    res.send('Vous pouvez télécharger le zip Clickable et Readact')
+})
 
 routeExp.route('/option').get(function (req, res) {
 
@@ -211,7 +393,6 @@ routeExp.route('/option').get(function (req, res) {
         res.end()
     })
 })
-
 
 routeExp.route('/downloadClick').get(function (req, res) {
     var path_click = 'Downloads/zip/Clickable.zip'
@@ -277,9 +458,6 @@ async function create_redaction(pdffile, cachedata) {
                             await search_redact(nom);
                         }
                     });
-                    // res.json({
-                    //     sql
-                    // });
                 } catch (error) {
                     logger.error(error);
                     res.status(500).json({ details: error });
@@ -463,4 +641,308 @@ async function create_redaction(pdffile, cachedata) {
     }
 }
 
+
+
+
+// async function create_redaction_pdf(pdffile, cachedata) {
+//     let patternnum =
+//     {
+//         name: "Numero",
+//         patern: "[0-9]{2}[ ][0-9]{2}[ ][0-9]{2}[ ][0-9]{2}[ ][0-9]{2}"
+//     }
+//     await search_redact(patternnum);
+
+//     //Pattern1 : pattern pour le numero de telephone en Belgique
+//     let pattern1 =
+//     {
+//         name: "Numero",
+//         patern: "[+]3{1}2{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{3}+[ ]{0,1}+[-]{0,1}+[.]{0,1}+\\d{2}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{2}+\\d{0,1}"
+//     }
+//     await search_redact(pattern1);
+//     //Pattern2 : pattern pour l'email 
+//     let pattern2 =
+//     {
+//         name: "Email",
+//         patern: "[a-zA-Z0-9._%+-]+[a-zA-Z0-9._%+-]+@[A-z]+[a-zA-Z0-9._%+-]+[a-zA-Z]"
+//     }
+//         ;
+//     await search_redact(pattern2);
+//     //Pattern 3 : pattern pour le numero tva
+//     let pattern3 =
+//     {
+//         name: "N° TVA",
+//         patern: "[A-Z]{2}[ ]{0,1}[0-9]{4}[^A-Za-z0-9_]{0,1}[0-9]{3}[^A-Za-z0-9_]{0,1}[0-9]{3}"
+//     }
+//     await search_redact(pattern3);
+//     //Pattern 4: pattern pour le IBAN
+//     let pattern4 =
+//     {
+//         name: "N° IBAN",
+//         patern: "[A-Z]{2}[0-9]{2}[ ]{0,1}[0-9]{4}[ ]{0,1}[0-9]{4}[ ]{0,1}[0-9]{4}[ ]{0,1}[A-Z0-9]{4}[ ]{0,1}[A-Z0-9]{4}"
+//     }
+//     await search_redact(pattern4);
+//     //pattern 4IBAN :  
+//     let patterniban =
+//     {
+//         name: "N° IBAN",
+//         patern: "[A-Z]{2}[0-9]{2}[ ]{1}[0-9]{4}[ ]{1}[0-9]{4}[ ]{1}[0-9]{4}"
+//     }
+//     await search_redact(patterniban);
+//     //pattern swift/BIC
+//     let swiftBic =
+//     {
+//         name: "N° BIC/SWIFT",
+//         patern: "^[A-Z0-9]{8,11}"
+//     }
+//     await search_redact(swiftBic);
+//     //Pattern 5 : pattern IBAN2
+//     let pattern5 =
+//     {
+//         name: "N° IBAN",
+//         patern: "[A-Z]{2}[0-9]{14}"
+//     }
+//     await search_redact(pattern5);
+//     //patern numero CIN
+//     const cin =
+//     {
+//         name: "N° IDENTITY NATIONAL",
+//         patern: "[0-9]{2}[.](?:1[0-2]|0[0-9]{1})[.](?:3[0-1]|0[1-9]{1}|2[0-9]{1})-[0-9]{3}[.][0-9]{2}"
+//     }
+//     await search_redact(cin);
+//     // //identification passport
+//     const passport =
+//     {
+//         name: "N° PASSPORT",
+//         patern: "\\b(?:[A-Z]{2}[0-9]{6})\\b"
+//     }
+//     await search_redact(passport);
+//     //numero voiture
+//     const numVoiture =
+//     {
+//         name: "N° PLAQUE VOITURE",
+//         patern: "\\b(?:[1-8]{1}[-][A-Y]{1}[A-Z]{2}[-][0-9]{3})\\b"
+//     }
+//     await search_redact(numVoiture);
+//     //NIV voiture
+//     const nivVehicule =
+//     {
+//         name: "NIV Vehicule",
+//         patern: "\\b(?:(?:[0-9]|[A-H]|[J-N]|[P]|[R-Z]){8}(?:[0-9]|[X]){1}(?:[1-9]|[A-H]|[J-N]|[P]|[R-T]|[V-Y]){1}(?:[0-9]|[A-H]|[J-N]|[P]|[R-Z]){1}[0-9]{6})\\b"
+//     }
+//     await search_redact(nivVehicule);
+//     //patern numero permis de conduire
+//     const permis =
+//     {
+//         name: "N° PERMIS",
+//         patern: "/[1-9]{2}[ .]{0,1}(?:1[0-2]|0[0-9]{1})[ .]{0,1}[0-9]{2}[ .]{0,1}[0-9]{2}[ .]{0,1}[0-9]{4}/g"
+//     }
+//     await search_redact(permis);
+//     //identificaiton employer
+//     const employer =
+//     {
+//         name: "EMPLOYER",
+//         patern: "\\b(?:[1-9]{1}[0-9]{11})\\b"
+//     }
+//     await search_redact(employer);
+//     // for (let index = 0; index < cachedata.length; index++) {
+//     //     let clef = cachedata[index].name
+//     //     if (clef == "Nom" || clef == "Adresse" || clef == "Ville") {
+//     //         if (clef == "Nom") {
+//     //             try {
+//     //                 let result = await Users.distinct('nom');
+//     //                 result.forEach(async element => {
+//     //                     if (element.length !== 0) {
+//     //                         let nom =
+//     //                         {
+//     //                             name: "Noms",
+//     //                             pattern: String(element)
+//     //                         }
+//     //                         await search_redact(nom);
+//     //                     }
+//     //                 });
+//     //                 // res.json({
+//     //                 //     sql
+//     //                 // });
+//     //             } catch (error) {
+//     //                 logger.error(error);
+//     //                 res.status(500).json({ details: error });
+//     //             }
+//     //         } else if (clef == "Adresse") {
+//     //             try {
+//     //                 let result = await Users.distinct('adresse');
+//     //                 result.forEach(async r => {
+//     //                     if (r.length !== 0) {
+//     //                         let adresse =
+//     //                         {
+//     //                             name: "Adresse",
+//     //                             pattern: String(r)
+//     //                         }
+//     //                         await search_redact(adresse);
+//     //                     }
+//     //                 });
+//     //             } catch (error) {
+//     //                 logger.error(error);
+//     //                 res.status(500).json({ details: error });
+//     //             }
+//     //         } else if (clef == "Ville") {
+//     //             try {
+//     //                 let result = await Users.distinct('ville');
+
+//     //                 result.forEach(async element => {
+//     //                     if (element.length !== 0) {
+//     //                         let ville =
+//     //                         {
+//     //                             name: "Ville",
+//     //                             pattern: String(element)
+//     //                         }
+//     //                         await search_redact(ville);
+//     //                     }
+//     //                 });
+//     //             } catch (error) {
+//     //                 logger.error(error);
+//     //                 res.status(500).json({ details: error });
+//     //             }
+//     //         }
+//     //     } else {
+//     //         await search_redact(cachedata[index]);
+//     //     }
+//     // }
+//     //con.end()
+
+
+//     var inputPath_redacted = pdffile; // pdf a chercher
+//     var inputPath_clickable = pdffile; // pdf a chercher
+//     //Fonction pour chercher un mot dans le pdf
+//     function search_redact(pattern) {
+//         const main = async () => {
+//             try {
+//                 const doc = await PDFNet.PDFDoc.createFromUFilePath(pdffile);
+//                 doc.initSecurityHandler();
+//                 doc.lock();
+//                 const txtSearch = await PDFNet.TextSearch.create();
+//                 let mode = (PDFNet.TextSearch.Mode.e_whole_word | PDFNet.TextSearch.Mode.e_highlight) + PDFNet.TextSearch.Mode.e_reg_expression;
+//                 txtSearch.begin(doc, pattern.patern, mode);
+//                 let result = await txtSearch.run();
+//                 while (true) {
+//                     if (result.code === PDFNet.TextSearch.ResultCode.e_found) {
+//                         let hlts = result.highlights;
+//                         hlts.begin(doc);
+//                         while ((await hlts.hasNext())) {
+//                             const quadArr = await hlts.getCurrentQuads();
+//                             for (let i = 0; i < quadArr.length; ++i) {
+//                                 //Coordonnée du mot trouvé dans le pdf 
+//                                 const currQuad = quadArr[i];
+//                                 const x1 = Math.min(Math.min(Math.min(currQuad.p1x, currQuad.p2x), currQuad.p3x), currQuad.p4x);
+//                                 const x2 = Math.max(Math.max(Math.max(currQuad.p1x, currQuad.p2x), currQuad.p3x), currQuad.p4x);
+//                                 const y1 = Math.min(Math.min(Math.min(currQuad.p1y, currQuad.p2y), currQuad.p3y), currQuad.p4y);
+//                                 const y2 = Math.max(Math.max(Math.max(currQuad.p1y, currQuad.p2y), currQuad.p3y), currQuad.p4y);
+//                                 redact_create(x1, y1, x2, y2, result.page_num, pattern.name); //Mettre un redact dans le coordonnée designé
+//                                 button_create(x1, y1, x2, y2, result.page_num, pattern.name); //Mettre un masque clickable dans le coordonnée designé
+//                                 break;
+//                             }
+//                             hlts.next();
+//                             break;
+//                         }
+//                         while (await hlts.hasNext()) {
+//                             await hlts.next();
+//                         }
+//                     } else if (result.code === PDFNet.TextSearch.ResultCode.e_page) {
+//                         ////////////////////////////////////////
+
+//                     } else if (result.code === PDFNet.TextSearch.ResultCode.e_done) {
+//                         ///////////////////////////////////////
+//                         await doc.save(pdfpath_redacted, PDFNet.SDFDoc.SaveOptions.e_linearized);
+//                         inputPath_redacted = pdfpath_redacted;
+//                         await doc.save(pdfpath_clickable, PDFNet.SDFDoc.SaveOptions.e_linearized);
+//                         inputPath_clickable = pdfpath_clickable;
+//                         break;
+//                     }
+//                     result = await txtSearch.run();
+//                 }
+//             } catch (err) {
+//                 console.log(err);
+//             }
+//             //Fonction pour redacter
+//             function redact_create(x1, y1, x2, y2, page_num, name) {
+//                 ((exports) => {
+//                     exports.runPDFRedactTest = () => {
+//                         const main = async () => {
+//                             try {
+//                                 const doc = await PDFNet.PDFDoc.createFromFilePath(inputPath_redacted);
+//                                 doc.initSecurityHandler();
+
+//                                 const blankPage = await doc.getPage(page_num);
+//                                 const btn_field = await doc.fieldCreate("button." + numBtn, PDFNet.Field.Type.e_button);
+//                                 const btnbox = await PDFNet.PushButtonWidget.createWithField(doc, await PDFNet.Rect.init(x1, y1, x2, y2), btn_field);
+//                                 btnbox.setBackgroundColor(await PDFNet.ColorPt.init(0, 0, 0), 1);
+//                                 fields = ["button." + numBtn];
+//                                 //await btnbox.setAction(await PDFNet.Action.createHideField(doc, fields));
+//                                 btnbox.setStaticCaptionText(name)
+//                                 btnbox.refreshAppearance();
+//                                 blankPage.annotPushBack(btnbox);
+
+//                                 numBtn++;
+
+//                                 await doc.save(pdfpath_redacted, PDFNet.SDFDoc.SaveOptions.e_linearized);
+//                                 inputPath_redacted = pdfpath_redacted;
+//                             } catch (err) {
+//                                 console.log(err.stack);
+//                             }
+//                         };
+
+//                         // add your own license key as the second parameter, e.g. PDFNet.runWithCleanup(main, 'YOUR_LICENSE_KEY')
+//                         PDFNet.runWithCleanup(main).then(function () { PDFNet.shutdown(); });
+//                     };
+//                     exports.runPDFRedactTest();
+//                 })(exports);
+
+//             }
+
+//             // Fonction pour creer un bouton
+//             function button_create(x1, y1, x2, y2, page_num, name) {
+//                 ((exports) => {
+
+//                     exports.runPDFRedactTest = () => {
+
+//                         const main = async () => {
+//                             try {
+//                                 const doc = await PDFNet.PDFDoc.createFromFilePath(inputPath_clickable);
+//                                 doc.initSecurityHandler();
+//                                 const blankPage = await doc.getPage(page_num);
+
+//                                 const btn_field = await doc.fieldCreate("button." + numBtn, PDFNet.Field.Type.e_button);
+//                                 const btnbox = await PDFNet.PushButtonWidget.createWithField(doc, await PDFNet.Rect.init(x1, y1, x2, y2), btn_field);
+//                                 btnbox.setBackgroundColor(await PDFNet.ColorPt.init(0, 0, 0), 1);
+//                                 fields = ["button." + numBtn];
+//                                 await btnbox.setAction(await PDFNet.Action.createHideField(doc, fields));
+//                                 btnbox.setStaticCaptionText(name)
+//                                 btnbox.refreshAppearance();
+//                                 blankPage.annotPushBack(btnbox);
+
+//                                 numBtn++;
+//                                 await doc.save(pdfpath_clickable, PDFNet.SDFDoc.SaveOptions.e_linearized);
+//                                 inputPath_clickable = pdfpath_clickable;
+//                             } catch (err) {
+//                                 console.log(err.stack);
+//                                 ret = 1;
+//                             }
+//                         };
+//                         // add your own license key as the second parameter, e.g. PDFNet.runWithCleanup(main, 'YOUR_LICENSE_KEY')
+//                         PDFNet.runWithCleanup(main).then(function () { PDFNet.shutdown(); });
+                        
+//                     };
+//                     exports.runPDFRedactTest();
+//                 })(exports);
+//             }
+
+//         }
+//         PDFNet.runWithCleanup(main).catch((err) => {
+//             console.log(err);
+//         }).then(() => {
+//             PDFNet.shutdown();
+//         });
+
+    
+//     }
+// }
 module.exports = routeExp;
