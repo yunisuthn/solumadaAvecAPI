@@ -205,7 +205,6 @@ routeExp.route('/fileupload').post(function (req, res) {
             extra_fs.emptyDirSync(redacted_files_directory); //Vidage du dossier redacted_files
             extra_fs.emptyDirSync(clickable_files_directory); //Vidage du dossier clickables_files
             
-            extra_fs.emptyDirSync(zip_files_directory)
             progress(0); //Ecrire 0 dans le fichier progress.txt
             if (selected_files.length === 0) {
                 console.log('Aucun fichier PDF...')
@@ -260,7 +259,6 @@ routeExp.route('/fileupload').post(function (req, res) {
             extra_fs.emptyDirSync(redacted_files_directory); //Vidage du dossier redacted_files
             extra_fs.emptyDirSync(clickable_files_directory); //Vidage du dossier clickables_files
             
-            extra_fs.emptyDirSync(zip_files_directory)
             if (selected_files.length === 0) {
                 console.log('Aucun fichier PDF...')
             } else {
@@ -382,9 +380,7 @@ routeExp.route('/api/option').get(function (req, res){
 })
 
 routeExp.route('/option').get(function (req, res) {
-
     extra_fs.emptyDirSync(zip_files_directory)
-
     var zipdir = require('zip-dir');
     zipdir('Downloads/Clickable', { saveTo: 'Downloads/zip/Clickable.zip' }, function (err, buffer) {
     });
