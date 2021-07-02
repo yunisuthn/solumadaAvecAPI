@@ -10,7 +10,7 @@ const cors = require('cors')
 
 const app = express()
 
-
+//app.use(cors());
 var contentDisposition = require('content-disposition')
 
 //Declaration des variables globales
@@ -131,6 +131,27 @@ var getParams = []
 
 routeExp.route('/fileupload').post(function (req, res) {
     // variables à reinitialiser
+    if(req.query.nom=='true'){
+        let obj = {
+            name: 'Nom',
+            pattern: ''
+        }
+        getParams.push(obj)
+    }
+    if(req.query.adresse=='true'){
+        let obj = {
+            name: 'Adresse',
+            pattern: ''
+        }
+        getParams.push(obj)
+    }
+    if(req.query.ville=='true'){
+        let obj = {
+            name: 'Ville',
+            pattern: ''
+        }
+        getParams.push(obj)
+    }
     if(req.query.email=='true'){
         let obj = {
             name: 'Email',
@@ -271,7 +292,6 @@ routeExp.route('/fileupload').post(function (req, res) {
                             OUTPUT_FILE_NAME_CLICK = FILE_NAME.split('.pdf')[0] + '_clickable.pdf';
                             pdfpath_redacted = path.join(redacted_files_directory, OUTPUT_FILE_NAME)
                             pdfpath_clickable = path.join(clickable_files_directory, OUTPUT_FILE_NAME_CLICK);
-                            console.log('Ici traitement')
                             await create_redaction(file.path, getParams); //une fonction pour traiter un fichier
             
                         }, Time); //Une fonction setTimeout de 10 seconde pour s'assurrer que le traitement du fichier soit bien fini (un fichier = 20 seconde)
@@ -449,14 +469,14 @@ let Users = require('./model/model')
 
 var province = []
 
-    // fs.readFile('./public/json/liste-des-codes-postaux-belges-fr.json', (err, data) => {
-    //     if (err) throw err;
-    //     var region = JSON.parse(data);
+    fs.readFile('./public/json/tableau.json', (err, data) => {
+        if (err) throw err;
+        var region = JSON.parse(data);
         
-    //     for (let index = 0; index < region.length; index++) {
-    //         province.push(region[index].fields.province)
-    //     }
-    // });
+        for (let index = 0; index < region.length; index++) {
+            province.push(region[index].province)
+        }
+    });
 
 
 async function create_redaction(pdffile, cachedata) {
