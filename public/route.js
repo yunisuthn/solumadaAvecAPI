@@ -450,6 +450,7 @@ routeExp.route('/fileupload').post(function (req, res) {
                         current_nbr_file = files.length;
                         if (files.length >= selected_files.length){
                             clearInterval(counter);
+                            selected_files = []
                             console.log('** Redaction terminée... **');
                             res.sendStatus(200)
                         }
