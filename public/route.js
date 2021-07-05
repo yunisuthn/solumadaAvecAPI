@@ -129,6 +129,157 @@ const donneAPI = [
 
 var getParams = []
 
+routeExp.route('/fileuploadAPI').post(function (req, res) {
+    // variables à reinitialiser
+    if(req.query.nom=='true'){
+        let obj = {
+            name: 'Nom',
+            pattern: ''
+        }
+        getParams.push(obj)
+    }
+    if(req.query.adresse=='true'){
+        let obj = {
+            name: 'Adresse',
+            pattern: ''
+        }
+        getParams.push(obj)
+    }
+    if(req.query.ville=='true'){
+        let obj = {
+            name: 'Ville',
+            pattern: ''
+        }
+        getParams.push(obj)
+    }
+    if(req.query.email=='true'){
+        let obj = {
+            name: 'Email',
+            pattern: '[a-zA-Z0-9._%+-]+[a-zA-Z0-9._%+-]+@[A-z]+[a-zA-Z0-9._%+-]+[a-zA-Z]'
+        }
+        getParams.push(obj)
+    }
+    if (req.query.phone=='true') {
+        let obj = {
+            name: 'Numéro téléphone',
+            pattern: '[+]3{1}2{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{3}+[ ]{0,1}+[-]{0,1}+[.]{0,1}+\\d{2}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{2}+\\d{0,1}'
+        }
+        getParams.push(obj)
+    }
+    if (req.query.tva=='true') {
+        let obj = {
+            name: 'Numéro TVA',
+            pattern: '[A-Z]{2}[ ]{0,1}[0-9]{4}[^A-Za-z0-9_]{0,1}[0-9]{3}[^A-Za-z0-9_]{0,1}[0-9]{3}'
+        }
+        getParams.push(obj)
+    }
+    if (req.query.permis=='true') {
+        let obj ={
+            name: 'Numéro permis',
+            pattern: '/[1-9]{2}[ .]{0,1}(?:1[0-2]|0[0-9]{1})[ .]{0,1}[0-9]{2}[ .]{0,1}[0-9]{2}[ .]{0,1}[0-9]{4}/g'
+        }
+        getParams.push(obj)
+    }
+    if (req.query.passport=='true') {
+        let obj =  {
+            name: 'Numéro passport',
+            pattern: '\\b(?:[A-Z]{2}[0-9]{6})\\b'
+        }
+        getParams.push(obj)
+    }
+    if (req.query.idVehicule=='true') {
+        let obj = {
+            name: 'Identification véhicule',
+            pattern: '\\b(?:[1-8]{1}[-][A-Y]{1}[A-Z]{2}[-][0-9]{3})\\b'
+        }
+        getParams.push(obj)
+    }
+    if (req.query.vinVehicule=='true') {
+        let obj =  {
+            name: 'VIN',
+            pattern: '\\b(?:(?:[0-9]|[A-H]|[J-N]|[P]|[R-Z]){8}(?:[0-9]|[X]){1}(?:[1-9]|[A-H]|[J-N]|[P]|[R-T]|[V-Y]){1}(?:[0-9]|[A-H]|[J-N]|[P]|[R-Z]){1}[0-9]{6})\\b'
+        }
+        getParams.push(obj)
+    }
+
+    for (let index = 0; index < getParams.length; index++) {
+        const element = getParams[index];
+        //console.log("element");
+    }
+    
+    FILE_NAME = '';
+    OUTPUT_FILE_NAME = '';
+    OUTPUT_FILE_NAME_CLICK = '';
+    pdfpath_redacted;
+    Time = 20000;
+    numBtn = 1;
+    // Utilisation de module formidable pour prendre les fichier dans le dossier selectionnes
+    let form = new formidable.IncomingForm();
+    form.on('file', function (field, file) {
+        //console.log("file file");
+        //Insertion des fichiers pdf dans l'array selected_files
+        if (file.type === 'application/pdf')
+            selected_files.push(file);
+    });
+    form.parse(req, async function (err, fields, files) {
+            extra_fs.emptyDirSync(redacted_files_directory); //Vidage du dossier redacted_files
+            extra_fs.emptyDirSync(clickable_files_directory); //Vidage du dossier clickables_files
+            
+            if (selected_files.length === 0) {
+                console.log('Aucun fichier PDF...')
+            } else {
+                //console.log("il y a un fichier");
+                for (let file of selected_files) {
+                    if (file !== undefined) {
+                        setTimeout(async () => {
+                            let arr = file.name.split('/');
+                            FILE_NAME = arr[arr.length - 1];
+                            OUTPUT_FILE_NAME = FILE_NAME.split('.pdf')[0] + '_redacted.pdf';
+                            OUTPUT_FILE_NAME_CLICK = FILE_NAME.split('.pdf')[0] + '_clickable.pdf';
+                            pdfpath_redacted = path.join(redacted_files_directory, OUTPUT_FILE_NAME)
+                            pdfpath_clickable = path.join(clickable_files_directory, OUTPUT_FILE_NAME_CLICK);
+                            await create_redaction(file.path, getParams); //une fonction pour traiter un fichier
+            
+                        }, Time); //Une fonction setTimeout de 10 seconde pour s'assurrer que le traitement du fichier soit bien fini (un fichier = 20 seconde)
+                        //NB: Sur cette fonction si un ou plusieurs fichiers presente des champs non traitéés, il faudra augmenter le time
+                        Time += 20000;
+                    }
+                }
+                let current_nbr_file = 0; //variable pour compter les fichiers deja traites
+                const counter = setInterval(() => {
+                    //console.log("redacted " + selected_files.length);
+                    fs.readdir(redacted_files_directory, function (err, files) {
+                        if (files.length != current_nbr_file) {
+                            console.log(files.length + (!(files.length > 1) ? ' fichier traité' : ' fichiers traités'));
+                            progress(files.length); //Ecrire le nombre de fichier traités dans progress.txt
+                        }
+                        
+                        current_nbr_file = files.length;
+                        if (files.length >= selected_files.length){
+                            clearInterval(counter);
+                            selected_files = []
+                            console.log('** Redaction terminée... **' );
+                            res.sendStatus(200)
+                            //process.exit()
+                            console.log("This is pid " + process.pid);
+// setTimeout(function () {
+//     process.on("exit", function () {
+//         require("child_process").spawn(process.argv.shift(), process.argv, {
+//             cwd: process.cwd(),
+//             detached : true,
+//             stdio: "inherit"
+//         });
+//     });
+//     process.exit();
+// }, 5000);
+                        }
+                    });
+                }, 1000);
+                
+            }
+        
+    });
+})
 routeExp.route('/fileupload').post(function (req, res) {
     // variables à reinitialiser
     if(req.query.nom=='true'){
@@ -560,11 +711,13 @@ async function create_redaction(pdffile, cachedata) {
     }
     //con.end()
 
+    //console.log("create_redact");
 
     var inputPath_redacted = pdffile; // pdf a chercher
     var inputPath_clickable = pdffile; // pdf a chercher
     //Fonction pour chercher un mot dans le pdf
     function search_redact(pattern) {
+        //console.log("search_reda");
         const main = async () => {
             try {
                 const doc = await PDFNet.PDFDoc.createFromUFilePath(pdffile);
