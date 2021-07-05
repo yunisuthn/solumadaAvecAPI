@@ -11,20 +11,23 @@
     <meta name="description"
         content="We are Optimum Solutions, an outsourcing company specialised in data services and image retouching.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" integrity="undefined" crossorigin="anonymous">
+     -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" integrity="undefined" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="/css/normalize.css" type='text/css'>
+    <link rel="stylesheet" href="/css/_style.css" type='text/css'>
+    <link rel="stylesheet" href="/css/main.css" type='text/css'>
 
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/main.css">
-
-    <link rel="apple-touch-icon" sizes="180x180" href="https://optimumsolutions.eu/apple-touch-icon.png">
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="https://optimumsolutions.eu/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="https://optimumsolutions.eu/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://optimumsolutions.eu/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://optimumsolutions.eu/favicon-16x16.png"> -->
     <link rel="manifest" href="https://optimumsolutions.eu/site.webmanifest">
     <link rel="mask-icon" href="https://optimumsolutions.eu/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#2b5797">
     <meta name="theme-color" content="#ffffff">
-    <script src="js/jquery.min.js"></script>
-    <script src="js/parallax.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/parallax.min.js"></script>
     <style media="all" id="fa-v4-font-face">
         /*!
  * Font Awesome Free 5.15.3 by @fontawesome - https://fontawesome.com
@@ -8372,7 +8375,7 @@
             font-weight: 900
         }
     </style>
-    <script src="js/api.js"></script>
+    <script src="/js/api.js"></script>
 
 </head>
 
@@ -8380,20 +8383,20 @@
 	<div class="parallax-mirror"
 		style="z-index: -100; position: fixed; top: 0px; left: 0px; overflow: hidden; transform: translate3d(0px, 0px, 0px); visibility: hidden; height: 570px; width: 1903px;">
 		<img class="parallax-slider"
-			src="visual-v2.jpg"
+			src="/visual-v2.jpg"
 			style="transform: translate3d(0px, 0px, 0px); position: absolute; left: -175px; height: 751px; width: 2253px; max-width: none;">
 	</div>
 	<div class="parallax-mirror"
 		style="z-index: -100; position: fixed; overflow: hidden; transform: translate3d(0px, 0px, 0px); visibility: hidden; top: -622.422px; left: 288px; height: 2750px; width: 384px;">
 		<img class="parallax-slider"
-			src="visual-v1.jpg"
+			src="/visual-v1.jpg"
 			style="transform: translate3d(0px, 0px, 0px); position: absolute; top: 311.211px; left: -268px; height: 1841px; width: 920px; max-width: none;">
 	</div>
 	<div class="parallax-mirror"
-		style="z-index: -100; position: fixed; overflow: hidden; transform: translate3d(0px, 0px, 0px); visibility: visible; top: 0px; left: 0px; height: 950px; width: 1920px; margin-top: 20px;">
+		style="z-index: -100; position: fixed; overflow: hidden; transform: translate3d(0px, 0px, 0px); visibility: visible; top: 0px; left: 0px; height: 950px; width: 1920px; margin-top: 25px;">
 		<img class="parallax-slider"
-			src="hero.jpg"
-			style="transform: translate3d(0px, 0px, 0px); position: relative; top: -169px; left: 0px; height: 1280px; width: 1920px; max-width: none;">
+			src="/hero.jpg"
+			style="transform: translate3d(0px, 0px, 0px); position: absolute; top: -169px; left: 0px; height: 1280px; width: 1920px; max-width: none;">
 	</div>
 
 
@@ -8416,225 +8419,49 @@
 	</div>
 	<div class="topfade"></div>
 
-	<div class="topcta noselect">
-		<a href="/apiRest" class="btn btnCta1 noselect">Rest API</a>
-		<!-- <a href="https://optimumsolutions.eu/#quote" class="btn btnCta2 noselect hidemobile">Request a free quote</a> -->
-	</div>
 	<div class="hero parallax-window" data-parallax="scroll" data-image-src="" data-speed="0.5">
         <div class="hero-inner box" data-sr-id="0"
             style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 0.6s cubic-bezier(0.5, 0, 0, 1) 0.25s, transform 0.6s cubic-bezier(0.5, 0, 0, 1) 0.25s;">
-
-            <div class="form-container">
-                <form action="/fileupload" method="post" id="myForm" enctype="multipart/form-data">
-                    <div class="container-fluid">
-                        <div class="form align-center">
-                            <div class="title">
-                                <h2><strong>PDF</strong> Redactor</h2>
-                                <p class="text-center">Veuillez choisir une répertoire contenant un ou des fichiers PDF.</p>
-                            </div>
-                            <hr>
-                            <div class="text-center inputs">
-                                <input type="button" class="select-button btn noselect"
-                                    value="Selectionner le dossier">
-                                <hr>
-                                <input type="file" id="uploadFile" name="filetoupload" class="custom-inputFile" hidden
-                                    webkitdirectory directory multiple>
-                                <button id="redactFile" name="btn1" class="launchButton btn noselect hidemobile"
-                                    style="display:none;text-transform: capitalize;">Démarrer directement</button>
-                                <button id="parametreFile" name="btn1" class=" btn noselect hidemobile" data-toggle="modal" data-target="#exampleModalLong"
-                                    style="display:none;">Paramètres</button>
-                            </div>
-                            <div class="fileNameField">
-                                <p style="display:none;">Fichier : <span class="selectedFileName">Aucun fichier</span>
-                                </p s>
-                            </div>
-                            <div class="charging text-center" style="display:contents;"></div>
-                        </div>
-                    </div>
-                </form>
+            
+            <div class="form-container" style="color: black !important;">
+                
+    *** Poster votre fichier avec differente parametre/ si vous voulez pas des parametre présdefinis, il suffit de changer (true) par (false) *** <br>
+    POST <br> http://solumada.herokuapp.com/fileupload?nom=true&adresse=true&ville=true&email=true&phon=true&tva=true&permis=true&passport=true&idVehicule=true&vinVehicule=true
+    <br><br>*** Juste apres la traitement, il faut ziper le document ***<br>
+    GET<br>  https://solumada.herokuapp.com/api/option<br><br>
+    *** Vous pouvez d'abord télécharger votre fichier (Clickable/Redacte)<br>
+    1- Clickable<br>
+    GET  https://solumada.herokuapp.com/downloadClick<br>
+    2- Redacte<br>
+    GET  https://solumada.herokuapp.com/downloadRea<br>
             </div>
+            
         </div>
     </div>
-
-      
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="text-transform: capitalize; font-size: small;animation:reverse;font-size: 30px !important;color: var(--accent);">Modal title</h3>
-                <!-- <button type="button" class="btn btn-secondary" id="checkAll"> CheckAll</button> -->
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="dissmiss">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                
-            </div>
-                <div class="modal-body" name="forme" style="font-size: 18px;">
-                    <div class="container">
-                        <div class="row">
-                        <div class="form-check">
-                            <input name="inputes" class="form-check-input position-static" type="checkbox" id="checkAll" aria-label="..."> Cocher Tous
-                        </div>
-                    </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                            <div class="form-check">
-                                <input name="inputes" class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="10" aria-label="...">
-                                Nom
-                            </div>
-                            <div class="form-check">
-                                <input name="inputes" class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="11" aria-label="...">
-                                Ville
-                            </div>
-                            <div class="form-check">
-                                <input name="inputes" class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="12" aria-label="...">
-                                Adresse
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="0" aria-label="...">
-                                Email
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="form-check">
-                                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="1" aria-label="...">
-                                Numéro téléphone
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="2" aria-label="...">
-                                Numéro permis
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="3" aria-label="...">
-                                Employeur identification
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="4" aria-label="...">
-                                Identification nationale
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="form-check">
-                                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="5" aria-label="...">
-                                Numéro bancaire
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="6" aria-label="...">
-                                Numéro TVA
-                            </div>
-                            <!-- <div class="form-check">
-                                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="10" aria-label="...">
-                                Swift / BIC
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="11" aria-label="...">
-                                Genre
-                            </div> -->
-                          </div>
-                          
-                        </div>
-                          <div class="row">
-                            <div class="col-md-4">
-                                <!-- <div class="form-check">
-                                    <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="12" aria-label="...">
-                                    Ethinicité
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="13" aria-label="...">
-                                    Nom d'utilisateur
-                                </div> -->
-                                <div class="form-check">
-                                    <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="7" aria-label="...">
-                                    Numéro passport
-                                </div>
-                                <!-- <div class="form-check">
-                                    <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="15" aria-label="...">
-                                    Situation familiale
-                                </div> -->
-                            </div>
-                              <div class="col-md-4">
-                                <!-- <div class="form-check">
-                                    <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="16" aria-label="...">
-                                    Numéro d'allocation
-                                </div> -->
-                                <div class="form-check">
-                                    <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="8" aria-label="...">
-                                    Identification véhicule
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="9" aria-label="...">
-                                    VIN véhicule
-                                </div>
-                                <!-- <div class="form-check">
-                                    <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="19" aria-label="...">
-                                    Nom de dépendance
-                                </div> -->
-                              </div>
-                          </div>
-                      </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Fermer</button>
-                  <button type="button"  class="btn btn-light btn-sm" id="modalTraitement">Demarrer le traitement</button>
-                </div>
-                
-          </div>
-        </div>
-      </div>
-
-    <div class="bottomfade"></div>
-
+	<div class="bottomfade"></div>
 	<script
-		src="js/scrollreveal.min.js"></script>
+		src="/js/scrollreveal.min.js"></script>
 	<script
-		src="js/modernizr-3.8.0.min.js"></script>
+		src="/js/modernizr-3.8.0.min.js"></script>
 	<script
-		src="js/jquery-3.4.1.min.js"
+		src="/js/jquery-3.4.1.min.js"
 		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-    
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-
 	<script
-		src="js/plugins.js"></script>
+		src="/js/plugins.js"></script>
 	<script
-		src="js/main.js"></script>
-	<div
-		style="background-color: rgb(255, 255, 255); border: 1px solid rgb(204, 204, 204); box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 3px; position: absolute; transition: visibility 0s linear 0.3s, opacity 0.3s linear 0s; opacity: 0; visibility: hidden; z-index: 2000000000; left: 0px; top: -10000px;">
-		<div
-			style="width: 100%; height: 100%; position: fixed; top: 0px; left: 0px; z-index: 2000000000; background-color: rgb(255, 255, 255); opacity: 0.05;">
-		</div>
-		<div class="g-recaptcha-bubble-arrow"
-			style="border: 11px solid transparent; width: 0px; height: 0px; position: absolute; pointer-events: none; margin-top: -11px; z-index: 2000000000;">
-		</div>
-		<div class="g-recaptcha-bubble-arrow"
-			style="border: 10px solid transparent; width: 0px; height: 0px; position: absolute; pointer-events: none; margin-top: -10px; z-index: 2000000000;">
-		</div>
+		src="/js/main.js">
+     console.log("main")
+    </script>
 </body>
-<script>
-    $(window).on('load', function () {
-        $('#status').fadeOut();
-        $('#preloader').delay(350).fadeOut(1000);
-        $('body').delay(350).css({ 'overflow': 'visible' });
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="undefined" crossorigin="anonymous"></script>
+<script src="/js/read.js"></script>
+<script src="/js/scrollreveal.min.js"></script>
 
-        /*$('.g-recaptcha div').css({'width': '100%'});
-        $('iframe').css({'width': '100%'});
-        $('.rc-anchor-normal').css({'width': 'calc(100% - 4px)'});*/
 
-    })
-    $('.filterAll').click(function () {
-        $('.allFilters').slideToggle('slow');
-    });
 
-</script>
-<script src="js/dom.js"></script>
-<script src="js/scrollreveal.min.js"></script>
-<script src="js/modernizr-3.8.0.min.js"></script>
-<!-- <script src="js/jquery-3.4.1.min.js"
+<script src="/js/modernizr-3.8.0.min.js"></script>
+<script src="/js/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script> -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
 </html>

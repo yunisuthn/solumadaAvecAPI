@@ -262,16 +262,6 @@ routeExp.route('/fileuploadAPI').post(function (req, res) {
                             res.sendStatus(200)
                             //process.exit()
                             console.log("This is pid " + process.pid);
-// setTimeout(function () {
-//     process.on("exit", function () {
-//         require("child_process").spawn(process.argv.shift(), process.argv, {
-//             cwd: process.cwd(),
-//             detached : true,
-//             stdio: "inherit"
-//         });
-//     });
-//     process.exit();
-// }, 5000);
                         }
                     });
                 }, 1000);
@@ -525,6 +515,18 @@ app.get('/visual-v2.jpg', function (req, res) {
 app.get('/visual-v1.jpg', function (req, res) {
     res.sendFile(__dirname + "/" + "visual-v1.jpg");
 });
+
+routeExp.route('/apiRest').get(function (req, res) {
+    //rsres.writeHead(200, { 'content-type': 'text/plain' });
+    fs.readFile('./public/restAPI.html', null, function (error, data) {
+        if (error) {
+            res.write('file not found')
+        } else {
+            res.write(data) 
+        }
+        res.end()
+    })
+})
 
 routeExp.route('/progress.txt').get(function (req, res) {
     //rsres.writeHead(200, { 'content-type': 'text/plain' });
