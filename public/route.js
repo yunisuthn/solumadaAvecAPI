@@ -211,7 +211,7 @@ routeExp.route('/fileuploadAPI').post(function (req, res) {
     OUTPUT_FILE_NAME = '';
     OUTPUT_FILE_NAME_CLICK = '';
     pdfpath_redacted;
-    Time = 20000;
+    Time = 10000;
     numBtn = 1;
     // Utilisation de module formidable pour prendre les fichier dans le dossier selectionnes
     let form = new formidable.IncomingForm();
@@ -268,7 +268,7 @@ routeExp.route('/fileuploadAPI').post(function (req, res) {
                             res.sendStatus(200)
                         }
                     });
-                }, 1000);
+                }, 2000);
                 
             }
         
