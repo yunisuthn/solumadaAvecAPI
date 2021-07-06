@@ -243,7 +243,7 @@ routeExp.route('/fileuploadAPI').post(function (req, res) {
             
                         }, Time); //Une fonction setTimeout de 10 seconde pour s'assurrer que le traitement du fichier soit bien fini (un fichier = 20 seconde)
                         //NB: Sur cette fonction si un ou plusieurs fichiers presente des champs non traitéés, il faudra augmenter le time
-                        Time += 20000;
+                        Time += 10000;
                     }
                 }
                 let current_nbr_file = 0; //variable pour compter les fichiers deja traites
