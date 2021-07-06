@@ -258,8 +258,12 @@ routeExp.route('/fileuploadAPI').post(function (req, res) {
                         current_nbr_file = files.length;
                         if (files.length >= selected_files.length){
                             clearInterval(counter);
-                            console.log("selected_files "+ selected_files.length);
-                            selected_files = []
+                            //console.log("selected_files "+ selected_files.length);
+                            for (let i = selected_files.length; i > 0; i--) {
+                                selected_files.pop();
+                            }
+                            //selected_files = []
+                            console.log("selected_files " + selected_files.length);
                             console.log('** Redaction terminée... **' );
                             res.sendStatus(200)
                         }
