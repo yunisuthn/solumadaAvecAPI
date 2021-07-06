@@ -33,7 +33,11 @@ app.use('/', route)
 // extra_fs.emptyDirSync(redacted_files_directory); //Vidage du dossier redacted_files
 // extra_fs.emptyDirSync(clickable_files_directory); //Vidage du dossier clickables_files
 
-app.listen(PORT, function(){
-    console.log("server running ", PORT);
-})
+// app.listen(PORT, function(){
+//     console.log("server running ", PORT);
+// })
 
+const server = app.listen(process.env.PORT || PORT, () => {
+    const port = server.address().port;
+    console.log(`Express is working on port ${port}`);
+  });
