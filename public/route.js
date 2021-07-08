@@ -211,7 +211,7 @@ routeExp.route('/fileuploadAPI').post(function (req, res) {
     OUTPUT_FILE_NAME = '';
     OUTPUT_FILE_NAME_CLICK = '';
     pdfpath_redacted;
-    Time = 10000;
+    Time = 20000;
     numBtn = 1;
     // Utilisation de module formidable pour prendre les fichier dans le dossier selectionnes
     let form = new formidable.IncomingForm();
@@ -243,7 +243,7 @@ routeExp.route('/fileuploadAPI').post(function (req, res) {
             
                         }, Time); //Une fonction setTimeout de 10 seconde pour s'assurrer que le traitement du fichier soit bien fini (un fichier = 20 seconde)
                         //NB: Sur cette fonction si un ou plusieurs fichiers presente des champs non traitéés, il faudra augmenter le time
-                        Time += 10000;
+                        Time += 20000;
                     }
                 }
                 let current_nbr_file = 0; //variable pour compter les fichiers deja traites
