@@ -276,27 +276,27 @@ routeExp.route('/fileuploadAPI').post(function (req, res) {
 })
 routeExp.route('/fileupload').post(function (req, res) {
     // variables à reinitialiser
-    if(req.query.nom=='true'){
-        let obj = {
-            name: 'Nom',
-            pattern: ''
-        }
-        getParams.push(obj)
-    }
-    if(req.query.adresse=='true'){
-        let obj = {
-            name: 'Adresse',
-            pattern: ''
-        }
-        getParams.push(obj)
-    }
-    if(req.query.ville=='true'){
-        let obj = {
-            name: 'Ville',
-            pattern: ''
-        }
-        getParams.push(obj)
-    }
+    // if(req.query.nom=='true'){
+    //     let obj = {
+    //         name: 'Nom',
+    //         pattern: ''
+    //     }
+    //     getParams.push(obj)
+    // }
+    // if(req.query.adresse=='true'){
+    //     let obj = {
+    //         name: 'Adresse',
+    //         pattern: ''
+    //     }
+    //     getParams.push(obj)
+    // }
+    // if(req.query.ville=='true'){
+    //     let obj = {
+    //         name: 'Ville',
+    //         pattern: ''
+    //     }
+    //     getParams.push(obj)
+    // }
     if(req.query.email=='true'){
         let obj = {
             name: 'Email',
@@ -643,80 +643,82 @@ async function create_redaction(pdffile, cachedata) {
 
     for (let index = 0; index < cachedata.length; index++) {
         
-        let clef = cachedata[index].name
-        if (clef == "Nom" || clef == "Adresse" || clef == "Ville") {
-            if (clef == "Nom") {
-                try {
-                    let result = await Users.distinct('nom');
-                    result.forEach(async element => {
-                        if (element.length !== 0) {
-                            let nom =
-                            {
-                                name: "Noms",
-                                pattern: String(element)
-                            }
-                            await search_redact(nom);
-                        }
-                    });
-                } catch (error) {
-                    logger.error(error);
-                    res.status(500).json({ details: error });
-                }
-            } else if (clef == "Adresse") {
-                try {
-                    let result = await Users.distinct('adresse');
-                    result.forEach(async r => {
-                        if (r.length !== 0) {
-                            let adresse =
-                            {
-                                name: "Adresse",
-                                pattern: String(r)
-                            }
-                            await search_redact(adresse);
-                        }
-                    });
-                } catch (error) {
-                    logger.error(error);
-                    res.status(500).json({ details: error });
-                }
-            } else if (clef == "Ville") {
-                try {
-                    let result = await Users.distinct('ville');
+        // let clef = cachedata[index].name
+        // if (clef == "Nom" || clef == "Adresse" || clef == "Ville") {
+        //     if (clef == "Nom") {
+        //         try {
+        //             let result = await Users.distinct('nom');
+        //             result.forEach(async element => {
+        //                 if (element.length !== 0) {
+        //                     let nom =
+        //                     {
+        //                         name: "Noms",
+        //                         pattern: String(element)
+        //                     }
+        //                     await search_redact(nom);
+        //                 }
+        //             });
+        //         } catch (error) {
+        //             logger.error(error);
+        //             res.status(500).json({ details: error });
+        //         }
+        //     } else if (clef == "Adresse") {
+        //         try {
+        //             let result = await Users.distinct('adresse');
+        //             result.forEach(async r => {
+        //                 if (r.length !== 0) {
+        //                     let adresse =
+        //                     {
+        //                         name: "Adresse",
+        //                         pattern: String(r)
+        //                     }
+        //                     await search_redact(adresse);
+        //                 }
+        //             });
+        //         } catch (error) {
+        //             logger.error(error);
+        //             res.status(500).json({ details: error });
+        //         }
+        //     } else if (clef == "Ville") {
+        //         try {
+        //             let result = await Users.distinct('ville');
                     
                     
-                    //console.log("provindce == " + province);
-                    //province.forEach(element1 => console.log("provindce "))
-                    //console.log("res == " + province);
-                    result.forEach(async element => {
-                        if (element !== "") {
-                            let ville =
-                            {
-                                name: "Ville",
-                                pattern: String(element)
-                            }
-                            await search_redact(ville);
-                            //console.log("ville " + JSON.stringify(ville) );
-                        }
-                    });
-                    // result.forEach(async element => {
-                    //     if (element.length !== 0) {
-                    //         console.log(element);
-                    //         let ville =
-                    //         {
-                    //             name: "Ville",
-                    //             pattern: String(element)
-                    //         }
-                    //         await search_redact(ville);
-                    //     }
-                    // });
-                } catch (error) {
-                    logger.error(error);
-                    res.status(500).json({ details: error });
-                }
-            }
-        } else {
-            await search_redact(cachedata[index]);
-        }
+        //             //console.log("provindce == " + province);
+        //             //province.forEach(element1 => console.log("provindce "))
+        //             //console.log("res == " + province);
+        //             result.forEach(async element => {
+        //                 if (element !== "") {
+        //                     let ville =
+        //                     {
+        //                         name: "Ville",
+        //                         pattern: String(element)
+        //                     }
+        //                     await search_redact(ville);
+        //                     //console.log("ville " + JSON.stringify(ville) );
+        //                 }
+        //             });
+        //             // result.forEach(async element => {
+        //             //     if (element.length !== 0) {
+        //             //         console.log(element);
+        //             //         let ville =
+        //             //         {
+        //             //             name: "Ville",
+        //             //             pattern: String(element)
+        //             //         }
+        //             //         await search_redact(ville);
+        //             //     }
+        //             // });
+        //         } catch (error) {
+        //             logger.error(error);
+        //             res.status(500).json({ details: error });
+        //         }
+        //     }
+        // } else {
+        //     await search_redact(cachedata[index]);
+        // }
+        
+        await search_redact(cachedata[index]);
     }
     //con.end()
 
