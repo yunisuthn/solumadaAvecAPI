@@ -42,7 +42,7 @@ let setCache = function (req, res, next) {
     const period = 45000000 
   
     // you only want to cache for GET requests
-    if (req.method == 'GET' || req.method == 'POST') {
+    if (req.url == '/fileupload') {
       res.set('Cache-control', `public, max-age=${period}`)
     } else {
       // for the other requests set strict no caching parameters
