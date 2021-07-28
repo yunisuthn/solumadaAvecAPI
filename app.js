@@ -5,17 +5,17 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-// const mongoose = require("mongoose")
-// const config = require('./BD.js')
+const mongoose = require("mongoose")
+const config = require('./BD.js')
 const bodyParser = require('body-parser');
 const route = require('./public/route.js')
 const PORT = process.env.PORT || 8082
 const methodOverride = require('method-override')
-// mongoose.Promise = global.Promise
-// mongoose.connect(config.DB,{useUnifiedTopology: true, useNewUrlParser: true }).then(
-//     () => { console.log("Database is connected") },
-//     err => { console.log('Can not connect to the database' + err) }
-// )
+mongoose.Promise = global.Promise
+mongoose.connect(config.DB,{useUnifiedTopology: true, useNewUrlParser: true }).then(
+    () => { console.log("Database is connected") },
+    err => { console.log('Can not connect to the database' + err) }
+)
 
 app.use(methodOverride('X-HTTP-Method')) 
 app.use(methodOverride('X-HTTP-Method-Override'))
@@ -36,6 +36,8 @@ app.use('/', route)
 // app.listen(PORT, function(){
 //     console.log("server running ", PORT);
 // })
+
+
 
 const server = app.listen(process.env.PORT || PORT, () => {
     const port = server.address().port;
