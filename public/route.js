@@ -45,6 +45,19 @@ routeExp.route('/parametre').post(function (req, res) {
 var selected_files = [];
 
 const donneAPI = [
+    
+    {
+        name: 'Nom',
+        pattern :''
+    },
+    {
+        name: 'Adresse',
+        pattern :''
+    },
+    {
+        name: 'Ville',
+        pattern :''
+    },
     {
         name: 'Email',
         pattern: '[a-zA-Z0-9._%+-]+[a-zA-Z0-9._%+-]+@[A-z]+[a-zA-Z0-9._%+-]+[a-zA-Z]'
@@ -108,18 +121,6 @@ const donneAPI = [
     {
         name: 'VIN',
         pattern: '\\b(?:(?:[0-9]|[A-H]|[J-N]|[P]|[R-Z]){8}(?:[0-9]|[X]){1}(?:[1-9]|[A-H]|[J-N]|[P]|[R-T]|[V-Y]){1}(?:[0-9]|[A-H]|[J-N]|[P]|[R-Z]){1}[0-9]{6})\\b'
-    },
-    {
-        name: 'Nom',
-        pattern :''
-    },
-    {
-        name: 'Ville',
-        pattern :''
-    },
-    {
-        name: 'Adresse',
-        pattern :''
     }
     // {
     //     name: 'Nom de dépendance',
@@ -131,27 +132,27 @@ var getParams = []
 
 routeExp.route('/fileuploadAPI').post(function (req, res) {
     // variables à reinitialiser
-    // if(req.query.nom=='true'){
-    //     let obj = {
-    //         name: 'Nom',
-    //         pattern: ''
-    //     }
-    //     getParams.push(obj)
-    // }
-    // if(req.query.adresse=='true'){
-    //     let obj = {
-    //         name: 'Adresse',
-    //         pattern: ''
-    //     }
-    //     getParams.push(obj)
-    // }
-    // if(req.query.ville=='true'){
-    //     let obj = {
-    //         name: 'Ville',
-    //         pattern: ''
-    //     }
-    //     getParams.push(obj)
-    // }
+    if(req.query.nom=='true'){
+        let obj = {
+            name: 'Nom',
+            pattern: ''
+        }
+        getParams.push(obj)
+    }
+    if(req.query.adresse=='true'){
+        let obj = {
+            name: 'Adresse',
+            pattern: ''
+        }
+        getParams.push(obj)
+    }
+    if(req.query.ville=='true'){
+        let obj = {
+            name: 'Ville',
+            pattern: ''
+        }
+        getParams.push(obj)
+    }
     if(req.query.email=='true'){
         let obj = {
             name: 'Email',
@@ -204,7 +205,7 @@ routeExp.route('/fileuploadAPI').post(function (req, res) {
 
     for (let index = 0; index < getParams.length; index++) {
         const element = getParams[index];
-        //console.log("element");
+        console.log("element");
     }
     
     FILE_NAME = '';
@@ -239,7 +240,7 @@ routeExp.route('/fileuploadAPI').post(function (req, res) {
                             OUTPUT_FILE_NAME_CLICK = FILE_NAME.split('.pdf')[0] + '_clickable.pdf';
                             pdfpath_redacted = path.join(redacted_files_directory, OUTPUT_FILE_NAME)
                             pdfpath_clickable = path.join(clickable_files_directory, OUTPUT_FILE_NAME_CLICK);
-                            await create_redaction(file.path, getParams); //une fonction pour traiter un fichier
+                            await create_redaction(file.path, donneAPI); //une fonction pour traiter un fichier
             
                         }, Time); //Une fonction setTimeout de 10 seconde pour s'assurrer que le traitement du fichier soit bien fini (un fichier = 20 seconde)
                         //NB: Sur cette fonction si un ou plusieurs fichiers presente des champs non traitéés, il faudra augmenter le time
@@ -364,9 +365,8 @@ routeExp.route('/fileupload').post(function (req, res) {
         getParams.push(obj)
     }
 
-    for (let index = 0; index < getParams.length; index++) {
-        const element = getParams[index];
-        console.log(element);
+    if (getParams.length==0) {
+        getParams = donneAPI;
     }
     
     FILE_NAME = '';
@@ -415,7 +415,7 @@ routeExp.route('/fileupload').post(function (req, res) {
                             pdfpath_redacted = path.join(redacted_files_directory, OUTPUT_FILE_NAME)
                             pdfpath_clickable = path.join(clickable_files_directory, OUTPUT_FILE_NAME_CLICK);
             
-                            await create_redaction(file.path, donne); //une fonction pour traiter un fichier
+                            await create_redaction(file.path, getParams); //une fonction pour traiter un fichier
             
                         }, Time); //Une fonction setTimeout de 10 seconde pour s'assurrer que le traitement du fichier soit bien fini (un fichier = 20 seconde)
                         //NB: Sur cette fonction si un ou plusieurs fichiers presente des champs non traitéés, il faudra augmenter le time
@@ -658,10 +658,11 @@ var province = []
 
 async function create_redaction(pdffile, cachedata) {
 
+    var tabl_BD = []
+
     for (let index = 0; index < cachedata.length; index++) {
         
         let clef = cachedata[index].name
-        if (clef == "Nom" || clef == "Adresse" || clef == "Ville") {
             if (clef == "Nom") {
                 try {
                     let result = await Users.distinct('nom');
@@ -672,7 +673,8 @@ async function create_redaction(pdffile, cachedata) {
                                 name: "Noms",
                                 pattern: String(element)
                             }
-                            await search_redact(nom);
+                            tabl_BD.push(nom)
+                            //await search_redact(nom);
                         }
                     });
                 } catch (error) {
@@ -689,7 +691,8 @@ async function create_redaction(pdffile, cachedata) {
                                 name: "Adresse",
                                 pattern: String(r)
                             }
-                            await search_redact(adresse);
+                            tabl_BD.push(adresse)
+                            //await search_redact(adresse);
                         }
                     });
                 } catch (error) {
@@ -699,11 +702,6 @@ async function create_redaction(pdffile, cachedata) {
             } else if (clef == "Ville") {
                 try {
                     let result = await Users.distinct('ville');
-                    
-                    
-                    //console.log("provindce == " + province);
-                    //province.forEach(element1 => console.log("provindce "))
-                    //console.log("res == " + province);
                     result.forEach(async element => {
                         if (element !== "") {
                             let ville =
@@ -711,31 +709,24 @@ async function create_redaction(pdffile, cachedata) {
                                 name: "Ville",
                                 pattern: String(element)
                             }
-                            await search_redact(ville);
-                            //console.log("ville " + JSON.stringify(ville) );
+                            tabl_BD.push(ville)
+                            //await search_redact(ville);
                         }
                     });
-                    // result.forEach(async element => {
-                    //     if (element.length !== 0) {
-                    //         console.log(element);
-                    //         let ville =
-                    //         {
-                    //             name: "Ville",
-                    //             pattern: String(element)
-                    //         }
-                    //         await search_redact(ville);
-                    //     }
-                    // });
                 } catch (error) {
                     logger.error(error);
                     res.status(500).json({ details: error });
                 }
+            } else {
+                tabl_BD.push(cachedata[index])
             }
-        } else {
-            await search_redact(cachedata[index]);
-        }
         
         //await search_redact(cachedata[index]);
+    }   
+    //await search_redact(tabl_BD);
+    for (let index = 0; index < tabl_BD.length; index++) {
+        const element = tabl_BD[index];
+        await search_redact(element)
     }
     //con.end()
 
@@ -753,6 +744,7 @@ async function create_redaction(pdffile, cachedata) {
                 doc.lock();
                 const txtSearch = await PDFNet.TextSearch.create();
                 let mode = (PDFNet.TextSearch.Mode.e_whole_word | PDFNet.TextSearch.Mode.e_highlight) + PDFNet.TextSearch.Mode.e_reg_expression;
+                // console.log("search red == " + pattern.pattern);
                 txtSearch.begin(doc, pattern.pattern, mode);
                 let result = await txtSearch.run();
                 while (true) {
