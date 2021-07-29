@@ -64,7 +64,7 @@ const donneAPI = [
     },
     {
         name: 'Numéro téléphone',
-        pattern: '[+]3{1}2{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{3}+[ ]{0,1}+[-]{0,1}+[.]{0,1}+\\d{2}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{2}+\\d{0,1}'
+        pattern: '[(?=0032)||(?=+32)]+[ ]{0,1}+[0-9]{1,2}+[ ]{0,1}+[0-9]{2,3}+[ ]?+[0-9]{2,3}+[ ]?+[0-9]{2}+[ |\\n]' //
     },
     {
         name: 'Numéro permis',
@@ -163,7 +163,7 @@ routeExp.route('/fileuploadAPI').post(function (req, res) {
     if (req.query.phone=='true') {
         let obj = {
             name: 'Numéro téléphone',
-            pattern: '[+]3{1}2{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{3}+[ ]{0,1}+[-]{0,1}+[.]{0,1}+\\d{2}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{2}+\\d{0,1}'
+            pattern: '[(?=0032)||(?=+32)]+[ ]{0,1}+[0-9]{1,2}+[ ]{0,1}+[0-9]{2,3}+[ ]?+[0-9]{2,3}+[ ]?+[0-9]{2}+[ |\\n]'
         }
         getParams.push(obj)
     }
@@ -325,7 +325,7 @@ routeExp.route('/fileupload').post(function (req, res) {
     if (req.query.phone=='true') {
         let obj = {
             name: 'Numéro téléphone',
-            pattern: '[+]3{1}2{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{1}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{3}+[ ]{0,1}+[-]{0,1}+[.]{0,1}+\\d{2}+[ ]{0,1}+[.]{0,1}+[-]{0,1}+\\d{2}+\\d{0,1}'
+            pattern: '[(?=0032)||(?=+32)]+[ ]{0,1}+[0-9]{1,2}+[ ]{0,1}+[0-9]{2,3}+[ ]?+[0-9]{2,3}+[ ]?+[0-9]{2}+[ |\\n]'
         }
         getParams.push(obj)
     }
@@ -366,8 +366,10 @@ routeExp.route('/fileupload').post(function (req, res) {
     }
 
     if (getParams.length==0) {
-        getParams = donneAPI;
+        getParams = donne;
     }
+
+    console.log("donne == " + JSON.stringify(donne));
     
     FILE_NAME = '';
     OUTPUT_FILE_NAME = '';
@@ -415,7 +417,7 @@ routeExp.route('/fileupload').post(function (req, res) {
                             pdfpath_redacted = path.join(redacted_files_directory, OUTPUT_FILE_NAME)
                             pdfpath_clickable = path.join(clickable_files_directory, OUTPUT_FILE_NAME_CLICK);
             
-                            await create_redaction(file.path, getParams); //une fonction pour traiter un fichier
+                            await create_redaction(file.path, donne); //une fonction pour traiter un fichier
             
                         }, Time); //Une fonction setTimeout de 10 seconde pour s'assurrer que le traitement du fichier soit bien fini (un fichier = 20 seconde)
                         //NB: Sur cette fonction si un ou plusieurs fichiers presente des champs non traitéés, il faudra augmenter le time
@@ -744,7 +746,7 @@ async function create_redaction(pdffile, cachedata) {
                 doc.lock();
                 const txtSearch = await PDFNet.TextSearch.create();
                 let mode = (PDFNet.TextSearch.Mode.e_whole_word | PDFNet.TextSearch.Mode.e_highlight) + PDFNet.TextSearch.Mode.e_reg_expression;
-                // console.log("search red == " + pattern.pattern);
+                //console.log("search red == " + pattern.pattern);
                 txtSearch.begin(doc, pattern.pattern, mode);
                 let result = await txtSearch.run();
                 while (true) {
